@@ -1,0 +1,142 @@
+using System.Threading;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Core.Backend.Application.Models;
+using Core.Backend.Domain.Models;
+using Core.Backend.Application.Commands.Example;
+using Core.Backend.Application.Queries.Example;
+using Core.Backend.Api.Controllers;
+using Moq;
+using Serilog;
+using Xunit;
+using System.Threading.Tasks;
+
+namespace Core.Backend.Api.Tests
+{
+    public class ExampleControllerTests
+    {
+        private readonly Mock<IMediator> _mediatorMock;
+        private readonly Mock<ILogger> _loggerMock;
+        public ExampleControllerTests()
+        {
+            _mediatorMock = new Mock<IMediator>();
+            _loggerMock = new Mock<ILogger>();
+        }
+
+        [Fact]
+        public async Task GetExampleById_ShouldReturnOkResult()
+        {
+            // ARRANGE     
+            _mediatorMock
+                .Setup(x => x.Send(It.IsAny<GetExampleByIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new QueryResult<Example>());
+            var controller = new ExampleController(
+                _loggerMock.Object,
+                _mediatorMock.Object
+            );
+
+            // ACT
+            var response = await controller.GetExampleById(1);
+
+            // ASSERT
+            Assert.IsType<OkObjectResult>(response.Result);
+            _mediatorMock.Verify(x => x.Send(It.IsAny<GetExampleByIdQuery>(), It.IsAny<CancellationToken>()), Times.Once());
+        }
+
+        [Fact]
+        public async Task GetExampleById_ShouldReturnNotFoundResult_WhenQueryResultNotFound()
+        {
+            // ARRANGE     
+            _mediatorMock
+                .Setup(x => x.Send(It.IsAny<GetExampleByIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new QueryResult<Example>() { Type = QueryResultTypeEnum.NotFound });
+            var controller = new ExampleController(
+                _loggerMock.Object,
+                _mediatorMock.Object
+            );
+
+            // ACT
+            var response = await controller.GetExampleById(1);
+
+            // ASSERT
+            Assert.IsType<NotFoundResult>(response.Result);
+        }
+
+        [Fact]
+        public async Task GetExampleById_ShouldReturnBadResult_WhenInvalidInput()
+        {
+            // ARRANGE     
+            _mediatorMock
+                .Setup(x => x.Send(It.IsAny<GetExampleByIdQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new QueryResult<Example>() { Type = QueryResultTypeEnum.InvalidInput });
+            var controller = new ExampleController(
+                _loggerMock.Object,
+                _mediatorMock.Object
+            );
+
+            // ACT
+            var response = await controller.GetExampleById(1);
+
+            // ASSERT
+            Assert.IsType<BadRequestResult>(response.Result);
+        }
+
+        [Fact]
+        public async Task UpdateExampleNameById_ShouldReturnOkResult()
+        {
+            // ARRANGE      
+            _mediatorMock
+                .Setup(x => x.Send(It.IsAny<UpdateExampleNameCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandResult<bool>());
+            var controller = new ExampleController(
+                _loggerMock.Object,
+                _mediatorMock.Object
+            );
+
+            // ACT
+            var response = await controller.UpdateExampleNameById(1, "newName");
+
+            // ASSERT
+            Assert.IsType<OkObjectResult>(response.Result);
+            _mediatorMock.Verify(x => x.Send(It.IsAny<UpdateExampleNameCommand>(), It.IsAny<CancellationToken>()), Times.Once());
+        }
+
+        [Fact]
+        public async Task UpdateExampleNameById_ShouldReturnNotFoundResult_WhenCommandResultNotFound()
+        {
+            // ARRANGE 
+            _mediatorMock
+                .Setup(x => x.Send(It.IsAny<UpdateExampleNameCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandResult<bool>() { Type = CommandResultTypeEnum.NotFound });
+            var controller = new ExampleController(
+                _loggerMock.Object,
+                _mediatorMock.Object
+            );
+
+            // ACT
+            var response = await controller.UpdateExampleNameById(1, "newName");
+
+            // ASSERT
+            Assert.IsType<NotFoundResult>(response.Result);
+        }
+
+        [Fact]
+        public async Task UpdateExampleNameById_ShouldReturnBad_Result_WhenInvalidInput()
+        {
+            // ARRANGE 
+            _mediatorMock
+                .Setup(x => x.Send(It.IsAny<UpdateExampleNameCommand>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new CommandResult<bool>() { Type = CommandResultTypeEnum.InvalidInput });
+            var controller = new ExampleController(
+                _loggerMock.Object,
+                _mediatorMock.Object
+            );
+
+            // ACT
+            var response = await controller.UpdateExampleNameById(1, "newName");
+
+            // ASSERT
+            Assert.IsType<BadRequestResult>(response.Result);
+        }
+    }
+}
