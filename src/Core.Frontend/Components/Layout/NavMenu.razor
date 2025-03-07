@@ -1,9 +1,25 @@
-﻿<MudNavMenu>
-    <MudNavLink Href="/" Match="NavLinkMatch.All">Dashboard</MudNavLink>
-    <MudNavLink Href="/servers" Match="NavLinkMatch.Prefix">Servers</MudNavLink>
-    <MudNavGroup Title="Settings" Expanded="true">
-        <MudNavLink Href="/users"  Match="NavLinkMatch.Prefix">Users</MudNavLink>
-        <MudNavLink Href="/security"  Match="NavLinkMatch.Prefix">Security</MudNavLink>
-    </MudNavGroup>
-    <MudNavLink Href="/about"  Match="NavLinkMatch.Prefix">About</MudNavLink>
-</MudNavMenu>
+﻿<MudPaper Width="250px" Class="py-3 mb-4" Elevation="0">
+    <MudNavMenu>
+        <MudNavGroup Title="Settings" @bind-Expanded=_expanded>
+            <MudNavLink Href="/users">Users</MudNavLink>
+            <MudNavLink Href="/security">Security</MudNavLink>
+        </MudNavGroup>
+    </MudNavMenu>
+</MudPaper>
+
+<MudText>
+    The MudNavGroup is
+    @if (_expanded)
+    {
+        <b class="mud-theme-tertiary rounded pa-2 ml-2">expanded</b>
+    }
+    else
+    {
+        <b class="mud-theme-error rounded pa-2 ml-2">collapsed</b>
+    }
+</MudText>
+
+@code{
+    bool _expanded = true;
+}
+
