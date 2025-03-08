@@ -25,7 +25,6 @@ namespace Core.Gateway
             {
                 app.UseDeveloperExceptionPage();
             }
-
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
@@ -34,8 +33,8 @@ namespace Core.Gateway
             
             app.UseSwaggerForOcelotUI(opt => {
                 opt.PathToSwaggerGenerator = "/swagger/docs";
-            });         
-            app.UseOcelot().Wait();
+            });      
+            app.UseOcelot().Wait();    
         }
     }
 }

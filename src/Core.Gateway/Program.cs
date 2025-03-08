@@ -11,11 +11,19 @@ namespace Core.Gateway
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build();
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((context, config) =>
+                {
+                    var env = context.HostingEnvironment;
+                    config.SetBasePath(Directory.GetCurrentDirectory());
+                    config.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
+                    config.AddJsonFile($"ocelot.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+                    config.AddEnvironmentVariables();
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

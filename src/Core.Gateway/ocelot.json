@@ -10,10 +10,24 @@
                 }
             ],
             "UpstreamPathTemplate": "/api/v{version}/examples/{id}",
-            "UpstreamHttpMethod": [ "Get" ]
+            "UpstreamHttpMethod": [
+                "Get"
+            ]
         }
     ],
     "GlobalConfiguration": {
         "BaseUrl": "http://localhost"
-    }
+    },
+    "SwaggerEndPoints": [
+        {
+            "Key": "contacts",
+            "Config": [
+                {
+                    "Name": "Contacts API",
+                    "Version": "v1",
+                    "Url": "http://localhost:5100/swagger/v1/swagger.json"
+                }
+            ]
+        }
+    ]
 }
