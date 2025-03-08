@@ -1,0 +1,39 @@
+{
+    "Routes": [
+        {
+            "DownstreamPathTemplate": "/api/v{version}/examples/{id}",
+            "DownstreamScheme": "https",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5000
+                }
+            ],
+            "UpstreamPathTemplate": "/api/v{version}/examples/{id}",
+            "UpstreamHttpMethod": [
+                "Get"
+            ],
+            "SwaggerKey": "Core"
+        }
+    ],
+    "GlobalConfiguration": {
+        "BaseUrl": "http://localhost"
+    },
+    "SwaggerEndPoints": [
+        {
+            "Key": "Core",
+            "Config": [
+                {
+                    "Name": "Core API",
+                    "Version": "v1",
+                    "Url": "http://localhost:5000/swagger/v1/swagger.json"
+                },
+                {
+                    "Name": "Core API",
+                    "Version": "v2",
+                    "Url": "http://localhost:5000/swagger/v2/swagger.json"
+                }
+            ]
+        }
+    ]
+}
