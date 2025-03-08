@@ -3,10 +3,10 @@ version: '3.8'
 services:
   api:
     build:
-      context: src/Core.Backend.Api
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: src/Core.Backend.Api/Dockerfile
     ports:
-      - "5000:80"
+      - "5000:5000"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=db;Database=coredb;Username=postgres;Password=postgres
