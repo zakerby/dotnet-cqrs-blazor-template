@@ -9,5 +9,7 @@ namespace Core.Backend.Application.Models
         public string LOG_LEVEL { get; set; }
         public string SERVICE_URL { get; set; }
         public string SQL_CONNECTION_STRING { get; set; }
+
+        public string POSTGRES_CONNECTION_STRING { get; set; }
     }
 }
