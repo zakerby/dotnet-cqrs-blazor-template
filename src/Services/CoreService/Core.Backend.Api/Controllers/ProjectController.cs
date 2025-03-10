@@ -6,7 +6,8 @@ using Asp.Versioning;
 
 using Core.Backend.Application.Models;
 using Core.Backend.Domain.Models;
-using Core.Backend.Application.Queries.Projects;
+
+using Core.Backend.Application.Queries.Project;
 
 namespace Core.Backend.Api.Controllers
 {
