@@ -14,11 +14,15 @@ namespace Core.Backend.Application.Queries.Project
         private readonly IValidator<GetProjectByIdQuery> _validator;
         private readonly ILogger _logger;
 
+        private readonly IProjectRepository _projectRepository;
+
         public GetProjectByIdQueryHandler(
             ILogger logger,
+            IProjectRepository projectRepository,
             IValidator<GetProjectByIdQuery> validator)
         {
             _logger = logger;
+            _projectRepository = projectRepository;
             _validator = validator;
         } 
 
@@ -31,11 +35,7 @@ namespace Core.Backend.Application.Queries.Project
                 _logger.Error("Get project by id with id {Id} produced errors on validation {Errors}", request.Id, validation.ToString());
                 return new QueryResult<Domain.Models.Project>(result: default(Domain.Models.Project), type: QueryResultTypeEnum.InvalidInput);
             }
-            var project = new  Domain.Models.Project()
-            {
-                Id = request.Id,
-                Name = "Test Project",
-            };
+            var project = await _projectRepository.GetProjectById(request.Id);
 
             if (project == null)
             {
