@@ -6,7 +6,6 @@ using Core.Backend.Application.Interfaces;
 using Core.Backend.Application.Models;
 using System.Data.SqlClient;
 using Microsoft.Extensions.Options;
-using Npgsql;
 
 namespace Core.Backend.Infrastructure.Postgres
 {
@@ -23,16 +22,10 @@ namespace Core.Backend.Infrastructure.Postgres
 
         public async Task<int> UpdateExampleNameById(int id, string name)
         {
-            var query = Sql.GetUserById.Value;
+            var query = Sql.UpdateExampleNameById.Value;
 
-            using (var conn = new NpgsqlConnection(this._configuration.Value.POSTGRES_CONNECTION_STRING))
+            using (var conn = new SqlConnection(this._configuration.Value.SQL_CONNECTION_STRING))
             {
-                conn.Open();
-
-                var rowsAffected = await conn.ExecuteScalarAsync<int>(query, new { Id = id });
-
-                return rowsAffected;
-
                 //  conn.Open();
 
                 /*
@@ -41,6 +34,9 @@ namespace Core.Backend.Infrastructure.Postgres
                     More query control - Queries can be the exact syntax we specify vs the generated syntax from EF Core
                     Paramterization - Ties in to above, but parametrizing a query becomes trivial
                 */
+                // var rowsAffected = await conn.ExecuteScalarAsync<int>(query, new { Id = id, Name = name });
+
+                // return rowsAffected;
 
                 return 1;
             }

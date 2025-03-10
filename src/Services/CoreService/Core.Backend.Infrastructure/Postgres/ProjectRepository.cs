@@ -39,5 +39,19 @@ namespace Core.Backend.Infrastructure.Postgres
                 return project;
             }
         }
+
+        public async Task<bool> CreateProject(string projectName)
+        {
+            var query = Sql.Project.CreateProject.Value;
+
+            using (var conn = new NpgsqlConnection(this._configuration.Value.POSTGRES_CONNECTION_STRING))
+            {
+                conn.Open();
+
+                var rowsAffected = await conn.ExecuteAsync(query, new { Name = projectName });
+
+                return rowsAffected > 0;
+            }
+        }
     }
 }

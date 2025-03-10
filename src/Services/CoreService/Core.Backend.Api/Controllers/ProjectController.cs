@@ -4,10 +4,12 @@ using MediatR;
 using Serilog;
 using Asp.Versioning;
 
-using Core.Backend.Application.Models;
 using Core.Backend.Domain.Models;
 
+using Core.Backend.Application.Models;
 using Core.Backend.Application.Queries.Project;
+using Core.Backend.Application.Models.Project;
+using Core.Backend.Application.Commands.Project;
 
 namespace Core.Backend.Api.Controllers
 {
@@ -63,5 +65,26 @@ namespace Core.Backend.Api.Controllers
             return new OkObjectResult(result.Result);
         }
 
+        [HttpPost]
+        [ApiVersion("1")]
+        [ApiExplorerSettings(GroupName = "v1")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [Route("projects")]
+        public async Task<ActionResult<bool>> CreateProject([FromBody] CreateProjectBodyDto project)
+        {
+            var createProjectCommand = new CreateProjectCommand()
+            {
+                Project = project,
+            };
+
+            var result = await _mediator.Send(createProjectCommand);
+
+            if (result.Type == CommandResultTypeEnum.InvalidInput)
+            {
+                return new BadRequestResult();
+            }
+            return new OkObjectResult(result.Result);
+        }
     }
 }
