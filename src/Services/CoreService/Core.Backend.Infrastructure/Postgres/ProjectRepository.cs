@@ -7,6 +7,7 @@ using Dapper;
 
 using Core.Backend.Application.Interfaces;
 using Core.Backend.Application.Models;
+using System;
 
 
 
@@ -26,6 +27,8 @@ namespace Core.Backend.Infrastructure.Postgres
         public async Task<Domain.Models.Project> GetProjectById(int id)
         {
             var query = Sql.Project.GetProjectById.Value;
+
+            Console.WriteLine($"Connection string: {this._configuration.Value.POSTGRES_CONNECTION_STRING}");
 
             using (var conn = new NpgsqlConnection(this._configuration.Value.POSTGRES_CONNECTION_STRING))
             {
